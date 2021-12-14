@@ -1,0 +1,32 @@
+"European Union lawmakers are considering whether current rules aimed at limiting the practice of geoblocking across the bloc should be extended to 
+cover access to streaming audio-visual content. Access to services like Netflix tends to be gated to individual EU Member States, meaning Europeans 
+can be barred from accessing libraries of content offered elsewhere in the region. So if you’re trying to use your Netflix subscription to access the 
+service after moving to another Member State, or want to access inventory offered by Netflix elsewhere in Europe, the answer is typically a big fat no,
+ve  reported before . This undermines the core concept of the EU’s Single Market (and the Digital Single Market — aka the frictionless e-commerce 
+end-goal which rules such as those limiting geoblocking aim to deliver). The Commission is alive to ongoing issues around online access to audio-visual
+ content. In a  review  of the two-year-old Geo-blocking Regulation published today, it says it will kick off discussions with the audio-visual 
+ sector on ways to improve consumer access to this type of copyrighted content across the bloc. It says the planned talks will feed its upcoming 
+ Media and Audiovisual Action Plan — which aims to help European market players scale up and reach new audiences. However, it’s not committing 
+ to any specific actions as yet. So whether the push yields anything more nuanced than another “no” remains to be seen. (The movie industry being
+  a blocker to freer digital flows of content is, after all,  not a new story .) “Increased access and circulation of audiovisual content will 
+  benefit an increasing demand across-borders, including in border regions and with linguistic minorities,” the Commission suggests in a  press 
+  release  on its review of the current rules. It notes that on average a European consumer only has access to 14% of the films available online
+   in all the Member States as a whole (the EU27), with “significant variations” by country (such as viewers in Greece having access only to 
+   1.3% of the films available online in the EU, versus those in Germany having access to 43.1%). Its review also highlights growing demand 
+   (especially for younger age ranges) to access audio-visual content offered in other Member States — noting it almost doubled between 2015
+    and 2019 (from 5% to 9%). “A  2019 Eurobarometer  confirmed that there is interest in gaining access to audio-visual content offered in 
+    different Member States,” it adds. For other types of copyrighted content — including music, e-books and videogames — the Commission sounds
+     less convinced of the need for regulatory reform. “The Report concludes that a further extension of the scope would not necessarily 
+     bring substantial benefits to consumers in terms of choice of content, as the catalogues offered are rather homogeneous (in many instances 
+     beyond 90%) among Member States,” it writes, also flagging “potential impacts” on the price of such services in Member States 
+     (which can vary). After 18 months of application of the current Geo-blocking Regulation (in force since December 2018), the Commission 
+     review lauds progress in reducing some obstacles — claiming there’s been “a stark reduction in barriers caused by location requirements, 
+     from 26.9% down to 14% of approximately 9,000 websites surveyed”. “Such restrictions prevent users from attempting to register to foreign 
+     websites due to a postal address in another Member State, and is important because registration is a key stage of the online shopping process,” 
+     it notes. “A further decrease in restrictions that users faced when trying to access websites cross-border was reported (e.g. users were denied 
+     access or automatically rerouted), the remainder of which was residual (only 0.2% of websites blocking access).” It also credits the regulation 
+     with boosting the amount of cross-border delivery purchases, saying the increased access to cross-border websites provided by regulation led to 
+     an increase of 1.6% in the EU27 compared to 2015, adding that a third of the surveyed websites offered cross-border delivery. Commenting in a 
+     statement, the internal market commissioner, Thierry Breton, said: “This first review of the Geo-blocking Regulation already shows first positive
+      results. We will further monitor its effects and discuss with stakeholders, notably in the context of the Media and Audio-visual Action Plan to 
+      nsure the industry can scale up and reach new audiences, and consumers can fully enjoy the diversity of goods and services in the different EU Member States.” At last an end to geoblocking in Europe? Nope, not by a long chalk…",
