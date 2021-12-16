@@ -9,12 +9,6 @@ import io
 import rake
 import operator
 
-# Load JSON data and extract the JSON
-source_file = open('articles2.json')
-source_json = json.load(source_file)
-raw_data = source_json
-
-
 # Remove punctuation and special characters from a word, and convert whole
 # word to lowercase
 def clean(text):
@@ -38,17 +32,21 @@ def clean(text):
 
     return text
 
-def main():
+def main(source_file):
+    # Load JSON data and extract the JSON
+    source_json = json.load(source_file)
+    raw_data = source_json
+
     # EXAMPLE ONE - SIMPLE
     stoppath = "rtItems/data/stoplists/SmartStoplist.txt"
 
-    # 1. initialize RAKE by providing a path to a stopwords file
-    rake_object = rake.Rake(stoppath, 5, 3, 4)
+    # 1. initialize RAKE by providing stopwords path + algorithm-specific metrics
+    rake_object = rake.Rake(stoppath, 1, 3, 2,1,1,2)
 
     accuracies = []
     octr = -1
     for element in raw_data:
-        artTags = {}
+        artTags = []
         octr += 1
         if 'keywords' in element:
             if element['keywords']:
@@ -61,7 +59,6 @@ def main():
         f = open("temp.txt", "w")
         f.write(article)
         f.close()
-        
 
         # 2. run on RAKE on a given text
         sample_file = open("temp.txt", 'r',encoding="UTF-8")
@@ -73,18 +70,21 @@ def main():
         ourTags = []
         #take desired length of keywords 
         fCtr = 0
+        noneCtr = 0
         for sk in keywords: 
             skw = sk[0]
             if(fCtr < len(artTags)):
                 if(len(skw) > 0 and not skw.isnumeric()):
                     ourTags.append(skw.lower())
-            fCtr += 1
+                    fCtr += 1
+            #no tags to compare to, chooses top 5 tags
+            elif(len(artTags) == 0):
+                if noneCtr < 5:
+                    ourTags.append(skw.lower())
+                    noneCtr += 1
 
-        if octr < 50:
-            
+        if octr < 30:
             print(ourTags)
-            print(artTags)
-            print("\n")
 
         # Compare generated list to source list
         correct = 0
@@ -97,10 +97,16 @@ def main():
         if len(artTags) > 0:
             accuracies.append(correct/len(artTags))
 
-    return (sum(accuracies)/len(accuracies))
-
-
+    if len(accuracies) > 0:
+        return (sum(accuracies)/len(accuracies))
+    else:
+        return "No Accuracy Available"
 
 if __name__ == "__main__":
-    acc = main()
+    source_file = open('articles2.json')
+
+    if len(sys.argv) > 1:
+        source_file = open(sys.argv[1])
+
+    acc = main(source_file)
     print("Our Current Accuracy is " + str(acc))

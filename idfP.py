@@ -24,16 +24,19 @@ def clean(word):
         word = word.replace('"','')
 
     hasPunc = False
+    hasComma = False
     for char in word:
         if char in string.punctuation:
             if char == '.':
                 hasPunc = True
+            if char == ',':
+                hasComma = True
             if char != '-':
                 word = word.replace(char,'')
         if char == '\\':
             word = word.replace(char,'')
 
-    return (word, hasPunc)
+    return (word, hasPunc, hasComma)
 
 def getCommonWords():
     words = []
@@ -49,39 +52,82 @@ def getCommonWords():
 #find frequencies of words across all corpus 
 def main(source_file):
     # Load JSON data and extract the JSON
+   
     source_json = json.load(source_file)
     raw_data = source_json
 
     artCount = 0
-    commWords = getCommonWords()
-
+    
     accuracies = []
 
     #total # of non-common words in dataset (not unique)
     totalWs = 0
     tf = {}
+
+    prevPunc = True
+    #build tf, df dictionaries
     for element in raw_data:
         
         docWords = []
         dwfs = {}
         docWs = 0
+
+        propPhrase = ""
         
         article = element['article']
         words = article.split(sep=' ')
 
         for word in words:
             docWs += 1
-            (nword, _) = clean(word)            
+            currPunc = False
+            currComma = False
+            (nword, currPunc, currComma) = clean(word)           
 
-            if nword.lower() not in commWords and "'s" not in nword:
-                if nword not in docWords:
-                    docWords.append(nword)
-                
-                totalWs += 1
-                if nword in dwfs:
-                    dwfs[nword] += 1
+            if len(nword) > 0:
+                firstChar = nword[0]
+                #proper noun
+                if firstChar.isupper() and not prevPunc:
+                    nword = nword.lower()
+                    propPhrase += nword + ' '
+                    #if proper noun was followed by comma, this is end of proper noun phrase
+                    if currComma or currPunc:
+                        phr = propPhrase[:-1] #cut off last space
+                        if phr not in docWords:
+                            docWords.append(phr)
+                        #print(word)
+                        totalWs += 1
+                        if phr in dwfs:
+                            dwfs[phr] += 1
+                        else:
+                            dwfs[phr] = 1
+
+                        propPhrase = "" #reset
+                #non-proper noun, check if end of proper noun phrase
                 else:
-                    dwfs[nword] = 1
+                    if(propPhrase != ""):
+                        phr = propPhrase[:-1] #cut off last space
+                        if phr not in docWords:
+                            docWords.append(phr)
+                        #print(word)
+                        totalWs += 1
+                        if phr in dwfs:
+                            dwfs[phr] += 1
+                        else:
+                            dwfs[phr] = 1
+
+                        propPhrase = "" #reset
+
+            prevPunc = currPunc
+            '''
+            if nword not in docWords:
+                docWords.append(nword)
+            #print(word)
+            totalWs += 1
+            if nword in dwfs:
+                dwfs[nword] += 1
+            else:
+                dwfs[nword] = 1
+            '''
 
         #build df dict which has # of unique appearances in articles
         for dw in docWords:
@@ -95,17 +141,20 @@ def main(source_file):
             tf[(k,artCount)] = dwfs[k] / float(docWs)
 
         artCount += 1
+
     #build idf dict
     for word in df:
         idf[word] = math.log(float(artCount) / (df[word] + 1))
 
     aCtr = 0
     prevPunc = True
-    #score words based on our three dicts
+    #scores based on our three dicts
     for elem in raw_data:
         ourTags = []
         artTags = []
         tf_idf = {}
+
+        propPhrase = ""
 
         title = element['title']
         title = title.lower()
@@ -118,17 +167,31 @@ def main(source_file):
                 artTags = elem['keywords'].split(',')
 
         for word in words:
-            (nword, currPunc) = clean(word)
+            currPunc = False
+            currComma = False
+            (nword, currPunc, currComma) = clean(word)
 
-            if nword.lower() not in commWords and "'s" not in nword:
-                score = tf[(nword,aCtr)]*idf[nword]
-                if len(nword) > 0:
-                    firstChar = nword[0]
-                    if firstChar.isupper():
-                        #is proper noun
-                        if not prevPunc:
-                            if nword not in tf_idf:
-                                tf_idf[nword] = score
+            if len(nword) > 0:
+                firstChar = nword[0]
+                #proper noun
+                if firstChar.isupper() and not prevPunc:
+                    nword = nword.lower()
+                    propPhrase += nword + ' '
+                    #if proper noun was followed by comma, this is end of proper noun phrase
+                    if currComma or currPunc:
+                        phr = propPhrase[:-1] #cut off last space
+                        if phr not in tf_idf:
+                            tf_idf[phr] = tf[(phr,aCtr)]*idf[phr]
+
+                        propPhrase = "" #reset
+                #non-proper noun, check if end of proper noun phrase
+                else:
+                    if(propPhrase != ""):
+                        phr = propPhrase[:-1] #cut off last space
+                        if phr not in tf_idf:
+                            tf_idf[phr] = tf[(phr,aCtr)]*idf[phr]
+
+                        propPhrase = "" #reset
 
             prevPunc = currPunc
 
@@ -137,9 +200,11 @@ def main(source_file):
         noneCtr = 0
         for s in scores: 
             if(sCtr < len(artTags)):
-                if(len(s) > 0 and ' ' not in s and not s.isnumeric()):
+                if(len(s) > 0 and not s.isnumeric()):
                     ourTags.append(s.lower())
                     sCtr += 1
+                    if aCtr < 10:
+                        print(s.lower() + ' ' + str(scores[s]))
             elif(len(artTags) == 0):
                 if noneCtr < 5:
                     ourTags.append(s.lower())
